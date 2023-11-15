@@ -1,6 +1,8 @@
 /*
     Using weather flower hexes from reddit post below
     https://www.reddit.com/r/osr/comments/omtd4g/4_season_weather_table_hex_easy_and_logical/
+    Hex grid.png shows the coordinate map. It is unfortunately not up and down because
+    paint doesn't let you rotate in smaller increments than 90 degrees...
  */
 
 /***************************
@@ -12,6 +14,7 @@
 class WeatherHex {
     constructor( weather, hazard_level = 0 ) {
         this.weather = weather;
+        // hazard level can be 0, 1, or 2
         this.hazard_level = hazard_level;
     }
 }
@@ -33,60 +36,8 @@ class Season {
     }
 }
 
-class Board {
+class WeatherFlower {
     constructor() {
-        /* EMPTY SEASON CONSTRUCTION MATERIALS
-        const _HEX_MAP = new Map([
-        // Center
-        ['0,0', new WeatherHex('', false)],
-
-        // 1st Ring
-        ['0,1', new WeatherHex('', false)],
-        ['1,1', new WeatherHex('', false)],
-        ['1,0', new WeatherHex('', false)],
-        ['0,-1', new WeatherHex('', false)],
-        ['-1,-1', new WeatherHex('', false)],
-        ['-1,0', new WeatherHex('', false)],
-
-        // 2nd Ring
-        ['0,2', new WeatherHex('', false)],
-        ['1,2', new WeatherHex('', false)],
-        ['2,2', new WeatherHex('', false)],
-        ['2,1', new WeatherHex('', false)],
-        ['2,0', new WeatherHex('', false)],
-        ['1,-1', new WeatherHex('', false)],
-        ['0,-2', new WeatherHex('', false)],
-        ['-1,-2', new WeatherHex('', false)],
-        ['-2,-2', new WeatherHex('', false)],
-        ['-2,-1', new WeatherHex('', false)],
-        ['-2,0', new WeatherHex('', false)],
-        ['-1,1', new WeatherHex('', false)]
-    ]);
-    const _EXCEPTIONS = new Map([
-        ['', ['']],
-        ['', ['']],
-        ['', ['']],
-        ['', ['']],
-        ['', ['']],
-        ['', ['']],
-        ['', ['']],
-        ['', ['']]
-    ])
-    const _START_LOCATIONS = new Map([
-        [2, ''],
-        [3, ''],
-        [4, ''],
-        [5, ''],
-        [6, ''],
-        [7, ''],
-        [8, ''],
-        [9, ''],
-        [10, ''],
-        [11, ''],
-        [12, '']
-    ]);
-    */
-
         // SPRING
         const SPRING_HEX_MAP = new Map([
             // Center
@@ -295,7 +246,7 @@ class Board {
         this.WINTER = new Season( WINTER_HEX_MAP, WINTER_EXCEPTIONS, WINTER_START_LOCATIONS );
     }
 
-    averageOverDays( days ) {
+    averageHazardOverDays( days ) {
         const SPRING_RESULTS = this.SPRING.generateForecast( days );
         const SUMMER_RESULTS = this.SUMMER.generateForecast( days );
         const AUTUMN_RESULTS = this.AUTUMN.generateForecast( days );
@@ -530,16 +481,16 @@ function onHexmapCheck( coords, HEX_MAP ) {
 // Choose how many days to simulate
 const DAYS_SIMULATING = 20;
 
-const WEATHER_BOARD = new Board();
-// Choose generateXForecast for different seasons
+const WEATHER_BOARD = new WeatherFlower();
+// Choose generateForecast for different seasons
 // const WINTER_RESULTS = WEATHER_BOARD.WINTER.generateForecast( DAYS_SIMULATING );
 // const SPRING_RESULTS = WEATHER_BOARD.SPRING.generateForecast( DAYS_SIMULATING );
 const SUMMER_RESULTS = WEATHER_BOARD.SUMMER.generateForecast( DAYS_SIMULATING );
 // const AUTUMN_RESULTS = WEATHER_BOARD.AUTUMN.generateForecast( DAYS_SIMULATING );
 
-console.log(SUMMER_RESULTS.printout);
+console.log(SUMMER_RESULTS.results);
 
-let averages = WEATHER_BOARD.averageOverDays( DAYS_SIMULATING );
+let averages = WEATHER_BOARD.averageHazardOverDays( DAYS_SIMULATING );
 console.log(averages)
 console.log('\n');
 
