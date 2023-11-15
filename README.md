@@ -83,14 +83,14 @@ const _START_LOCATIONS = new Map([
 ```
 ## Coordinate Diagram
 
-(./CoordinateExample.png "Sorry it's 45 degrees off, paint doesn't allow for rotating under 90 degrees anymore...)
+![Coordinate Graph](./CoordinateExample.png "Sorry it's 45 degrees off, paint doesn't allow for rotating under 90 degrees anymore...")
 
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
 
-## Inspiration
+## Credits
 
 This is based on the weather generator created by reddit user [/u/KorbohneD](https://www.reddit.com/user/KorbohneD)
 
