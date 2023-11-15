@@ -1,9 +1,4 @@
-/*
-    Using weather flower hexes from reddit post below
-    https://www.reddit.com/r/osr/comments/omtd4g/4_season_weather_table_hex_easy_and_logical/
-    Hex grid.png shows the coordinate map. It is unfortunately not up and down because
-    paint doesn't let you rotate in smaller increments than 90 degrees...
- */
+//TODO: Make into a CLI program using Commander
 
 /***************************
  * 
@@ -292,7 +287,6 @@ class WeatherFlower {
  ***************************/
 //#region 
 
-// Orchestration Functions
 function runForSomeDays( season, start_coords, days ) {
     let i = 0
     let current_coords = start_coords
