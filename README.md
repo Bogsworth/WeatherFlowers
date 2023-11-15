@@ -83,7 +83,7 @@ const _START_LOCATIONS = new Map([
 ```
 ## Coordinate Diagram
 
-(./CoordinateExample.png "Sorry it's 45 degrees off, paint doesn't allow for rotating under 90 degrees anymore...)
+![Coordinate Graph](./CoordinateExample.png "Sorry it's 45 degrees off, paint doesn't allow for rotating under 90 degrees anymore...)
 
 ## Contributing
 
