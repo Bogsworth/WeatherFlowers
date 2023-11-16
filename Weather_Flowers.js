@@ -66,11 +66,11 @@ class WeatherFlower {
             ['-1,0', new WeatherHex('Nippy & Humid', 0)],
 
             // 2nd Ring
-            ['0,2', new WeatherHex('Heavy Rainfal', 1)],
+            ['0,2', new WeatherHex('Heavy Rainfall', 1)],
             ['1,2', new WeatherHex('Snowy Rain', 1)],
             ['2,2', new WeatherHex('Windy & Snowy', 0)],
-            ['2,1', new WeatherHex('Heavy Snowfalll', 1)],
-            ['2,0', new WeatherHex('Light Snowfalll', 1)],
+            ['2,1', new WeatherHex('Heavy Snowfall', 1)],
+            ['2,0', new WeatherHex('Light Snowfall', 1)],
             ['1,-1', new WeatherHex('Cold & Dry', 0)],
             ['0,-2', new WeatherHex('Pleasantly Warm', 0)],
             ['-1,-2', new WeatherHex('Strong Polen Drift', 1)],
@@ -169,7 +169,7 @@ class WeatherFlower {
             ['-1,0', new WeatherHex('Sunny & Cloudy', 0)],
 
             // 2nd Ring
-            ['0,2', new WeatherHex('Goose Summer', 0)],
+            ['0,2', new WeatherHex('Second Summer', 0)],
             ['1,2', new WeatherHex('Sporadic Gusts', 1)],
             ['2,2', new WeatherHex('Cold Winds', 0)],
             ['2,1', new WeatherHex('Frosty & Cloudy', 0)],
