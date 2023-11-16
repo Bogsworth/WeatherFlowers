@@ -1,4 +1,8 @@
+#!/usr/bin/env node
+
 //TODO: Make into a CLI program using Commander
+
+
 
 /***************************
  * 
@@ -19,9 +23,26 @@ class Season {
         this.hex_map = hex_map,
         this.exceptions = exceptions,
         this.start_locations = start_locations
+        this.max_units_from_center = 2;
     };
 
     generateForecast( days, start_location = this.start_locations.get( rollTwoDice() )) {
+        const MAX = this.max_units_from_center;
+        const CHECK_ARRAY = stringToArray( start_location )
+        let error_msg = `That is an illegal set of coordinates. ` +
+            `Next time please choose one between -2,-2 and 2,2\n`; 
+            
+        if (
+            CHECK_ARRAY[0] < ( 0 - MAX ) ||
+            CHECK_ARRAY[1] < ( 0 - MAX ) ||
+            CHECK_ARRAY[0] >  MAX ||
+            CHECK_ARRAY[1] >  MAX
+        ) {
+            start_location = this.start_locations.get( rollTwoDice() );
+            error_msg += `Your new coordinates are ${start_location}`;
+            console.log( error_msg );
+        }
+        
         const RESULTS = runForSomeDays(
             this,
             start_location,
@@ -303,6 +324,8 @@ function runForSomeDays( season, start_coords, days ) {
             ' Extreme weather warning! Highly dangerous!'
         ]
 
+        // TODO: add a try loop here, sometimes get the following error
+        // "TypeError: Cannot read properties of undefined (reading 'weather')"
         message += `\nDay ${CURRENT_DAY}, ${CURRENT_WEATHER.weather}.`;
         message += MESSAGE_ARRAY[ CURRENT_WEATHER.hazard_level ];
 
@@ -428,6 +451,41 @@ function wrapCoordsAroundMap( coordinates, direction, season ) {
     }
     return;
 }
+
+function generateForecastForSeason( options, season ) {
+    const WEATHER_BOARD = new WeatherFlower();
+    const DAYS_SIMULATING = options.days;
+    const STARTING_COORDS = options.starting_location;
+
+    if ( STARTING_COORDS == false ) {
+        console.log('are startingcoords false?')
+        if ( season == 'spring' ) {
+            return WEATHER_BOARD.SPRING.generateForecast( DAYS_SIMULATING );
+        }
+        else if ( season == 'summer' ) {
+            return WEATHER_BOARD.SUMMER.generateForecast( DAYS_SIMULATING );
+        }
+        else if ( season == 'autumn' ) {
+            return WEATHER_BOARD.AUTUMN.generateForecast( DAYS_SIMULATING );
+        }
+        else { //if ( season == 'winter' )
+            return WEATHER_BOARD.WINTER.generateForecast( DAYS_SIMULATING );
+        }
+    }
+
+    if ( season == 'spring' ) {
+        return WEATHER_BOARD.SPRING.generateForecast( DAYS_SIMULATING, STARTING_COORDS );
+    }
+    else if ( season == 'summer' ) {
+        return WEATHER_BOARD.SUMMER.generateForecast( DAYS_SIMULATING, STARTING_COORDS );
+    }
+    else if ( season == 'autumn' ) {
+        return WEATHER_BOARD.AUTUMN.generateForecast( DAYS_SIMULATING, STARTING_COORDS );
+    }
+    else { //if ( season == 'winter' )
+        return WEATHER_BOARD.WINTER.generateForecast( DAYS_SIMULATING, STARTING_COORDS );
+    }
+}
 //#endregion
 
 /***************************
@@ -472,19 +530,66 @@ function onHexmapCheck( coords, HEX_MAP ) {
  * 
  ***************************/
 
-// Choose how many days to simulate
-const DAYS_SIMULATING = 20;
+const { program } = require('commander');
 
-const WEATHER_BOARD = new WeatherFlower();
-// Choose generateForecast for different seasons
-// const WINTER_RESULTS = WEATHER_BOARD.WINTER.generateForecast( DAYS_SIMULATING );
-// const SPRING_RESULTS = WEATHER_BOARD.SPRING.generateForecast( DAYS_SIMULATING );
-const SUMMER_RESULTS = WEATHER_BOARD.SUMMER.generateForecast( DAYS_SIMULATING );
-// const AUTUMN_RESULTS = WEATHER_BOARD.AUTUMN.generateForecast( DAYS_SIMULATING );
+program
+    .name('Weather-Flowers')
+    .description('Generate weather patterns for your RPGs')
+    .version('0.1.0');  
 
-console.log(SUMMER_RESULTS.results);
+program.command('average')
+    .description('output average hazard level for given days')
+    .option( '-d, --days <int>', 'output average hazard level over given days, default 5000', 5000 )
+    .action( options => {
+        const WEATHER_BOARD = new WeatherFlower();
+        const DAYS_SIMULATING = options.days;
 
-let averages = WEATHER_BOARD.averageHazardOverDays( DAYS_SIMULATING );
-console.log(averages)
-console.log('\n');
+        console.log( `Averaging over ${DAYS_SIMULATING} days gives the following:` );
+        console.log( WEATHER_BOARD.averageHazardOverDays( DAYS_SIMULATING ));
+    });
 
+program.command('spring')
+    .description( 'output a list of spring weather for given days' )
+    .option( '-d, --days <int>', 'output spring weather patterns for number of days', 20 )
+    .option( '-s, --starting_location <string>', 'output spring weather patterns starting at point on the hex map. Must be between \'-2,-2\' and \'2,2\'', false)
+    .action( options => {
+        const SEASON_STR = 'spring';
+        const RESULTS = generateForecastForSeason( options, SEASON_STR );
+
+        console.log( RESULTS.printout );
+    });
+
+program.command('summer')
+    .description( 'output a list of summer weather for given days' )
+    .option( '-d, --days <int>', 'output summer weather patterns for number of days', 20 )
+    .option( '-s, --starting_location <string>', 'output spring weather patterns starting at point on the hex map. Must be between \'-2,-2\' and \'2,2\'', false)
+    .action( options => {
+        const SEASON_STR = 'summer';
+        const RESULTS = generateForecastForSeason( options, SEASON_STR );
+
+        console.log( RESULTS.printout );
+    });
+
+program.command('autumn')
+    .description( 'output a list of autumn weather for given days' )
+    .option( '-d, --days <int>', 'output autumn weather patterns for number of days', 20 )
+    .option( '-s, --starting_location <string>', 'output spring weather patterns starting at point on the hex map. Must be between \'-2,-2\' and \'2,2\'', false)
+    .action( options => {
+        const SEASON_STR = 'autumn';
+        const RESULTS = generateForecastForSeason( options, SEASON_STR );
+
+        console.log( RESULTS.printout );
+    });
+
+program.command('winter')
+    .description( 'output a list of winter weather for given days' )
+    .option( '-d, --days <int>', 'output winter weather patterns for number of days', 20 )
+    .option( '-s, --starting_location <string>', 'output spring weather patterns starting at point on the hex map. Must be between \'-2,-2\' and \'2,2\'', false)
+    .action( options => {
+        const SEASON_STR = 'winter';
+        const RESULTS = generateForecastForSeason( options, SEASON_STR );
+
+        console.log( RESULTS.printout );
+    });
+
+program.parse();
